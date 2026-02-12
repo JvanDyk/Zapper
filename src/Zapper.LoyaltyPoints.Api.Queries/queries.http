@@ -1,0 +1,47 @@
+### Zapper Loyalty Points - Query API (Read Operations)
+### Base URL: http://localhost:5002 (HTTP) or https://localhost:5003 (HTTPS)
+
+@baseUrl = https://localhost:5003
+@contentType = application/json
+
+### Health Check
+GET {{baseUrl}}/health
+
+
+
+### Get All Merchants
+GET {{baseUrl}}/api/merchants
+
+### Get Merchant by Code
+GET {{baseUrl}}/api/merchants/zcoffee-001
+
+
+
+### Get All Customers
+GET {{baseUrl}}/api/customers
+
+### Get Customer by Code
+GET {{baseUrl}}/api/customers/cust-demo-1
+
+### Get Customer Balance Summary (All Merchants)
+GET {{baseUrl}}/api/customers/cust-demo-1/points/balance
+
+### Get Customer Balance for Specific Merchant
+GET {{baseUrl}}/api/customers/cust-demo-1/points/balance/zcoffee-001
+
+### Get Points History (Paginated)
+GET {{baseUrl}}/api/customers/cust-demo-1/points/history?limit=20&offset=0
+
+### Get Customer Points History for Specific Merchant
+GET {{baseUrl}}/api/customers/cust-demo-1/points/history?merchantId=zcoffee-001&limit=20&offset=0
+
+
+
+### Get Queue Status
+GET {{baseUrl}}/api/queue/status
+
+### Get Dead-Letter Messages
+GET {{baseUrl}}/api/queue/dead-letters
+
+### Get Queue History for a Message
+GET {{baseUrl}}/api/queue/history/00000000-0000-0000-0000-000000000001

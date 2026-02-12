@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-Zapper.LoyaltyPoints.Worker-05e140a8-2ed3-482f-9b98-f43a49f5b9f8</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zapper.LoyaltyPoints.Domain\Zapper.LoyaltyPoints.Domain.csproj" />
+    <ProjectReference Include="..\Zapper.LoyaltyPoints.Application\Zapper.LoyaltyPoints.Application.csproj" />
+    <ProjectReference Include="..\Zapper.LoyaltyPoints.Infrastructure\Zapper.LoyaltyPoints.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

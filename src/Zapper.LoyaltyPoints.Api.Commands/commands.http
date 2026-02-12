@@ -1,0 +1,54 @@
+### Zapper Loyalty Points - Command API (Write Operations)
+### Base URL: http://localhost:5000 (HTTP) or https://localhost:5001 (HTTPS)
+
+@baseUrl = https://localhost:5001
+@contentType = application/json
+
+### Health Check
+GET {{baseUrl}}/health
+
+
+
+### Create a Customer
+POST {{baseUrl}}/api/customers
+Content-Type: {{contentType}}
+
+{
+  "customerCode": "cust-{{$timestamp}}",
+  "name": "John Doe",
+  "email": "john@example.com"
+}
+
+### Ingest a Purchase Event
+POST {{baseUrl}}/api/purchases
+Content-Type: {{contentType}}
+X-Correlation-Id: purchase-{{$timestamp}}
+
+{
+  "transaction_id": "txn-{{$timestamp}}",
+  "merchant_id": "zcoffee-001",
+  "customer_id": "cust-demo-1",
+  "amount": 150.50,
+  "currency": "ZAR",
+  "timestamp": "2026-02-12T18:47:00Z",
+  "payment_method": "card"
+}
+
+### Ingest Another Purchase (Same Customer, Different Merchant)
+POST {{baseUrl}}/api/purchases
+Content-Type: {{contentType}}
+X-Correlation-Id: purchase-{{$timestamp}}
+
+{
+  "transaction_id": "txn-{{$timestamp}}",
+  "merchant_id": "zbooks-001",
+  "customer_id": "cust-demo-1",
+  "amount": 89.99,
+  "currency": "ZAR",
+  "timestamp": "2026-02-12T15:05:00Z",
+  "payment_method": "card"
+}
+
+### Retry a Failed Message (Queue Management)
+POST {{baseUrl}}/api/queue/retry/00000000-0000-0000-0000-000000000001
+Content-Type: {{contentType}}

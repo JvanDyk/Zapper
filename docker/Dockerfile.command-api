@@ -1,0 +1,31 @@
+# Multi-stage build for Command API (Write Operations)
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview AS base
+WORKDIR /app
+EXPOSE 5000
+EXPOSE 5001
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS build
+WORKDIR /src
+
+# Copy csproj files and restore
+COPY ["src/Zapper.LoyaltyPoints.Domain/Zapper.LoyaltyPoints.Domain.csproj", "src/Zapper.LoyaltyPoints.Domain/"]
+COPY ["src/Zapper.LoyaltyPoints.Application/Zapper.LoyaltyPoints.Application.csproj", "src/Zapper.LoyaltyPoints.Application/"]
+COPY ["src/Zapper.LoyaltyPoints.Infrastructure/Zapper.LoyaltyPoints.Infrastructure.csproj", "src/Zapper.LoyaltyPoints.Infrastructure/"]
+COPY ["src/Zapper.LoyaltyPoints.Api/Zapper.LoyaltyPoints.Api.csproj", "src/Zapper.LoyaltyPoints.Api/"]
+COPY ["src/Zapper.LoyaltyPoints.Api.Commands/Zapper.LoyaltyPoints.Api.Commands.csproj", "src/Zapper.LoyaltyPoints.Api.Commands/"]
+RUN dotnet restore "src/Zapper.LoyaltyPoints.Api.Commands/Zapper.LoyaltyPoints.Api.Commands.csproj"
+
+# Copy source code and build
+COPY src/Zapper.LoyaltyPoints.Domain/ src/Zapper.LoyaltyPoints.Domain/
+COPY src/Zapper.LoyaltyPoints.Application/ src/Zapper.LoyaltyPoints.Application/
+COPY src/Zapper.LoyaltyPoints.Infrastructure/ src/Zapper.LoyaltyPoints.Infrastructure/
+COPY src/Zapper.LoyaltyPoints.Api/ src/Zapper.LoyaltyPoints.Api/
+COPY src/Zapper.LoyaltyPoints.Api.Commands/ src/Zapper.LoyaltyPoints.Api.Commands/
+WORKDIR /src/src/Zapper.LoyaltyPoints.Api.Commands
+RUN dotnet publish -c Release -o /app/publish --self-contained false
+
+# Final stage
+FROM base AS final
+WORKDIR /app
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "Zapper.LoyaltyPoints.Api.Commands.dll"]

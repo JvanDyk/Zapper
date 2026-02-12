@@ -1,0 +1,16 @@
+.git
+.gitignore
+.dockerignore
+.vs
+.vscode
+bin
+obj
+*.user
+*.suo
+*.sln.iml
+node_modules
+npm-debug.log
+.DS_Store
+.env
+.env.local
+.env.*.local

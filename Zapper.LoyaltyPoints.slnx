@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Zapper.LoyaltyPoints.Api/Zapper.LoyaltyPoints.Api.csproj" />
+    <Project Path="src/Zapper.LoyaltyPoints.Api.Commands/Zapper.LoyaltyPoints.Api.Commands.csproj" />
+    <Project Path="src/Zapper.LoyaltyPoints.Api.Queries/Zapper.LoyaltyPoints.Api.Queries.csproj" />
+    <Project Path="src/Zapper.LoyaltyPoints.Application/Zapper.LoyaltyPoints.Application.csproj" />
+    <Project Path="src/Zapper.LoyaltyPoints.Domain/Zapper.LoyaltyPoints.Domain.csproj" />
+    <Project Path="src/Zapper.LoyaltyPoints.Infrastructure/Zapper.LoyaltyPoints.Infrastructure.csproj" />
+    <Project Path="src/Zapper.LoyaltyPoints.Worker/Zapper.LoyaltyPoints.Worker.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Zapper.LoyaltyPoints.IntegrationTests/Zapper.LoyaltyPoints.IntegrationTests.csproj" />
+    <Project Path="tests/Zapper.LoyaltyPoints.UnitTests/Zapper.LoyaltyPoints.UnitTests.csproj" />
+  </Folder>
+</Solution>

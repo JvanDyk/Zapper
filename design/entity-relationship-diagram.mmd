@@ -1,0 +1,66 @@
+erDiagram
+    CUSTOMER ||--o{ PURCHASE : makes
+    CUSTOMER ||--o{ CUSTOMER_BALANCE : has
+    CUSTOMER ||--o{ POINTS_LEDGER_ENTRY : earns
+    
+    MERCHANT ||--o{ PURCHASE : receives
+    MERCHANT ||--o{ CUSTOMER_BALANCE : "balance for"
+    MERCHANT ||--o{ POINTS_LEDGER_ENTRY : "ledger for"
+    
+    PURCHASE ||--o{ POINTS_LEDGER_ENTRY : generates
+    
+    CUSTOMER {
+        guid id PK
+        string CustomerCode UK
+        string name
+        string email
+        boolean IsActive
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+    
+    MERCHANT {
+        guid id PK
+        string MerchantCode UK
+        string name
+        string ContactEmail
+        boolean IsActive
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+    
+    PURCHASE {
+        guid id PK
+        string TransactionId UK
+        guid MerchantId FK
+        guid CustomerId FK
+        decimal Amount
+        string Currency
+        datetime TransactionTimestamp
+        string PaymentMethod
+        boolean PointsAwarded
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+    
+    CUSTOMER_BALANCE {
+        guid id PK
+        guid CustomerId FK
+        guid MerchantId FK
+        int TotalPoints
+        int Version
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+    
+    POINTS_LEDGER_ENTRY {
+        guid id PK
+        guid CustomerId FK
+        guid MerchantId FK
+        string TransactionId FK
+        int Points
+        decimal PurchaseAmount
+        string Description
+        datetime CreatedAt
+        datetime UpdatedAt
+    }

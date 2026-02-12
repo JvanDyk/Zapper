@@ -1,0 +1,82 @@
+version: "3.9"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: loyalty_points
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  command-api:
+    container_name: command-api
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.command-api
+    ports:
+      - "5000:5000"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://+:5000"
+      AppSettings__ConnectionStrings__LoyaltyDb: "Host=postgres;Port=5432;Database=loyalty_points;Username=postgres;Password=postgres"
+      AppSettings__Messaging__Provider: DevEmulator
+      AppSettings__DevEmulator__PollingIntervalMs: 1000
+      AppSettings__DevEmulator__MaxConcurrency: 5
+      AppSettings__DevEmulator__VisibilityTimeoutSeconds: 30
+      AppSettings__DevEmulator__MaxRetries: 3
+      AppSettings__DevEmulator__BatchSize: 10
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  query-api:
+    container_name: query-api
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.query-api
+    ports:
+      - "5002:5002"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: "http://+:5002"
+      AppSettings__ConnectionStrings__LoyaltyDb: "Host=postgres;Port=5432;Database=loyalty_points;Username=postgres;Password=postgres"
+      AppSettings__Messaging__Provider: DevEmulator
+      AppSettings__DevEmulator__PollingIntervalMs: 1000
+      AppSettings__DevEmulator__MaxConcurrency: 5
+      AppSettings__DevEmulator__VisibilityTimeoutSeconds: 30
+      AppSettings__DevEmulator__MaxRetries: 3
+      AppSettings__DevEmulator__BatchSize: 10
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  worker:
+    container_name: worker
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.worker
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      AppSettings__ConnectionStrings__LoyaltyDb: "Host=postgres;Port=5432;Database=loyalty_points;Username=postgres;Password=postgres"
+      AppSettings__Messaging__Provider: DevEmulator
+      AppSettings__DevEmulator__PollingIntervalMs: 1000
+      AppSettings__DevEmulator__MaxConcurrency: 5
+      AppSettings__DevEmulator__VisibilityTimeoutSeconds: 30
+      AppSettings__DevEmulator__MaxRetries: 3
+      AppSettings__DevEmulator__BatchSize: 10
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
